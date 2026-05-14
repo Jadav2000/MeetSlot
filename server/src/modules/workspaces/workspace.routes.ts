@@ -1,11 +1,11 @@
 import { Router } from "express";
 import crypto from "node:crypto";
-import { rateLimit } from "express-rate-limit";
 import { validate } from "../../middleware/validate.js";
 import { authMiddleware } from "../../middleware/authMiddleware.js";
 import { injectWorkspaceContext, requireWorkspaceRole } from "../../middleware/workspaceMiddleware.js";
 import { asyncHandler } from "../../shared/asyncHandler.js";
 import { badRequest, forbidden, notFound } from "../../shared/errors.js";
+import { createRateLimiter } from "../../shared/rateLimiter.js";
 import { Workspace } from "./workspace.model.js";
 import { Membership } from "./membership.model.js";
 import { Invite } from "../invites/invite.model.js";
@@ -16,7 +16,7 @@ import { acceptInviteSchema, createWorkspaceSchema, inviteSchema, objectIdParam,
 import { Room } from "../rooms/room.model.js";
 
 export const workspaceRouter = Router();
-const inviteLimiter = rateLimit({ windowMs: 60_000, limit: 10, standardHeaders: true, legacyHeaders: false });
+const inviteLimiter = createRateLimiter({ windowMs: 60_000, limit: 10 });
 
 workspaceRouter.use(authMiddleware);
 

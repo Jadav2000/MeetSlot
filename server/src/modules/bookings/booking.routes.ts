@@ -1,10 +1,10 @@
 import { Router } from "express";
 import mongoose from "mongoose";
-import rateLimit from "express-rate-limit";
 import { authMiddleware } from "../../middleware/authMiddleware.js";
 import { validate } from "../../middleware/validate.js";
 import { asyncHandler } from "../../shared/asyncHandler.js";
 import { conflict, forbidden, notFound } from "../../shared/errors.js";
+import { createRateLimiter } from "../../shared/rateLimiter.js";
 import { bookingIdParam, roomIdParam } from "../workspaces/workspace.schemas.js";
 import { createBookingSchema } from "./booking.schemas.js";
 import { Booking } from "./booking.model.js";
@@ -12,7 +12,7 @@ import { roomWorkspaceForUser } from "../rooms/room.routes.js";
 import { generateSlots } from "../../utils/time.js";
 import { writeAuditLog } from "../audit/audit.service.js";
 
-const bookingLimiter = rateLimit({ windowMs: 60_000, limit: 30, standardHeaders: true, legacyHeaders: false });
+const bookingLimiter = createRateLimiter({ windowMs: 60_000, limit: 30 });
 
 export const bookingRouter = Router();
 bookingRouter.use(authMiddleware);
