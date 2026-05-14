@@ -10,7 +10,19 @@ import { bookingRouter } from "./modules/bookings/booking.routes.js";
 
 export function createApp() {
   const app = express();
-  app.use(cors({ origin: env.CLIENT_ORIGIN, credentials: true }));
+  app.use(
+    cors({
+      origin: (origin, callback) => {
+        if (!origin || env.CLIENT_ORIGIN.includes(origin.replace(/\/$/, ""))) {
+          callback(null, true);
+        } else {
+          console.warn(`CORS blocked request from origin: ${origin}`);
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
+      credentials: true
+    })
+  );
   app.use(express.json());
   app.use(cookieParser());
 

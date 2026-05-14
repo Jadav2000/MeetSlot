@@ -6,7 +6,7 @@ const clientOriginsSchema = z
   .transform((s) =>
     s
       .split(",")
-      .map((part) => part.trim())
+      .map((part) => part.trim().replace(/\/$/, ""))
       .filter((part) => part.length > 0)
   )
   .pipe(z.array(z.string().url()).min(1));
@@ -28,4 +28,6 @@ export const env = envSchema.parse({
   CLIENT_ORIGIN: process.env.CLIENT_ORIGIN?.trim() || "http://localhost:3000",
   COOKIE_SECURE: process.env.COOKIE_SECURE ?? false
 });
+
+console.log("Allowed CORS origins:", env.CLIENT_ORIGIN);
 
