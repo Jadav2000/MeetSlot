@@ -1,6 +1,6 @@
 import { Router } from "express";
 import crypto from "node:crypto";
-import rateLimit from "express-rate-limit";
+import { rateLimit } from "express-rate-limit";
 import { validate } from "../../middleware/validate.js";
 import { authMiddleware } from "../../middleware/authMiddleware.js";
 import { injectWorkspaceContext, requireWorkspaceRole } from "../../middleware/workspaceMiddleware.js";
