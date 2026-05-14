@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: meet-slot-server
+    runtime: node
+    plan: free
+    branch: main
+    buildCommand: corepack enable && pnpm install --frozen-lockfile --prod=false && pnpm --filter @meetslot/server build
+    startCommand: pnpm --filter @meetslot/server start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22.18.0
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CLIENT_ORIGIN
+        sync: false
