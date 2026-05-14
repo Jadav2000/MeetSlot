@@ -11,7 +11,7 @@ import { env } from "../../config/env.js";
 
 const cookieOptions = {
   httpOnly: true,
-  sameSite: "lax" as const,
+  sameSite: env.COOKIE_SECURE ? ("none" as const) : ("lax" as const),
   secure: env.COOKIE_SECURE,
   maxAge: 7 * 24 * 60 * 60 * 1000
 };
@@ -52,4 +52,3 @@ authRouter.post("/logout", (_req, res) => {
 authRouter.get("/me", authMiddleware, (req, res) => {
   res.json({ success: true, data: { user: req.user } });
 });
-
