@@ -1,7 +1,6 @@
-import express from "express";
+import { createRequire } from "node:module";
+import express, { type RequestHandler } from "express";
 import cors from "cors";
-import type { RequestHandler } from "express";
-import * as helmetModule from "helmet";
 import cookieParser from "cookie-parser";
 import { env } from "./config/env.js";
 import { errorMiddleware } from "./middleware/errorMiddleware.js";
@@ -10,13 +9,12 @@ import { workspaceRouter } from "./modules/workspaces/workspace.routes.js";
 import { roomRouter } from "./modules/rooms/room.routes.js";
 import { bookingRouter } from "./modules/bookings/booking.routes.js";
 
-const createHelmetMiddleware =
-  (helmetModule as { default?: () => RequestHandler }).default ??
-  (helmetModule as unknown as () => RequestHandler);
+const require = createRequire(import.meta.url);
+const helmet = require("helmet") as (options?: object) => RequestHandler;
 
 export function createApp() {
   const app = express();
-  app.use(createHelmetMiddleware());
+  app.use(helmet());
   app.use(cors({ origin: env.CLIENT_ORIGIN, credentials: true }));
   app.use(express.json());
   app.use(cookieParser());
