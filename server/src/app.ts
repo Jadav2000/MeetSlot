@@ -1,6 +1,6 @@
-import { createRequire } from "node:module";
-import express, { type RequestHandler } from "express";
+import express from "express";
 import cors from "cors";
+import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import { env } from "./config/env.js";
 import { errorMiddleware } from "./middleware/errorMiddleware.js";
@@ -8,10 +8,6 @@ import { authRouter } from "./modules/auth/auth.routes.js";
 import { workspaceRouter } from "./modules/workspaces/workspace.routes.js";
 import { roomRouter } from "./modules/rooms/room.routes.js";
 import { bookingRouter } from "./modules/bookings/booking.routes.js";
-
-const require = createRequire(import.meta.url);
-/** Helmet 8 `import default` breaks `tsc` under `moduleResolution: "NodeNext"` on some installs (e.g. Vercel). CJS require stays callable in types. */
-const helmet = require("helmet") as (options?: object) => RequestHandler;
 
 export function createApp() {
   const app = express();
