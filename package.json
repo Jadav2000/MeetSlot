@@ -1,0 +1,16 @@
+{
+  "name": "meetslot",
+  "private": true,
+  "scripts": {
+    "dev": "corepack pnpm --parallel dev",
+    "build": "corepack pnpm -r build",
+    "lint": "corepack pnpm -r lint",
+    "test": "corepack pnpm --filter server test",
+    "seed": "corepack pnpm --filter server seed",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  },
+  "packageManager": "pnpm@9.12.3"
+}
